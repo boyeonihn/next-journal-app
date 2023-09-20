@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import Messages from './messages'
 
-export default function Login() {
+export default function Login({ searchParams }) {
+  const redirectTo = searchParams.redirect_to
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Link
@@ -27,7 +28,9 @@ export default function Login() {
 
       <form
         className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-        action="/auth/sign-in"
+        action={`/auth/sign-in?redirect_to=${encodeURIComponent(
+          redirectTo || ''
+        )}`}
         method="post"
       >
         <label className="text-md" htmlFor="email">
