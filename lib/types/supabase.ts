@@ -34,22 +34,44 @@ export interface Database {
   }
   public: {
     Tables: {
+      accounts: {
+        Row: {
+          id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       diary_entries: {
         Row: {
           content: string | null
-          date: number | null
+          created_ts: string | null
           emotion: number | null
           id: number
         }
         Insert: {
           content?: string | null
-          date?: number | null
+          created_ts?: string | null
           emotion?: number | null
           id: number
         }
         Update: {
           content?: string | null
-          date?: number | null
+          created_ts?: string | null
           emotion?: number | null
           id?: number
         }
@@ -61,7 +83,6 @@ export interface Database {
           created_ts: string | null
           emotion: number | null
           id: string
-          updated_ts: string | null
           user_id: string
         }
         Insert: {
@@ -69,15 +90,13 @@ export interface Database {
           created_ts?: string | null
           emotion?: number | null
           id?: string
-          updated_ts?: string | null
-          user_id?: string
+          user_id: string
         }
         Update: {
           content?: string | null
           created_ts?: string | null
           emotion?: number | null
           id?: string
-          updated_ts?: string | null
           user_id?: string
         }
         Relationships: [
