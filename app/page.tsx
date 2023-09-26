@@ -45,9 +45,6 @@ export default async function Index() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { data } = await supabase.from('diary_entries').select()
-  console.log('# data', data)
-
   return (
     <div className="w-full flex flex-col items-center">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
