@@ -1,25 +1,38 @@
-'use client'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Database } from '@/lib/types'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-import { ChangeEvent, FC, FormEvent, useState } from 'react'
+interface Props {
+  userId: string
+}
+export const NewEntryForm = ({ userId }: Props) => {
+  console.log('$$$$$', userId)
+  async function insertEntry(formData: FormData) {
+    'use server'
 
-export const NewEntryForm: FC<{ onInsert: (content: string) => void }> = ({
-  onInsert,
-}) => {
-  const [content, setContent] = useState('')
+    const supabase = createServerComponentClient<Database>({ cookies })
 
-  const onSubmit = async (event: FormEvent) => {
-    event.preventDefault()
-    onInsert(content)
-  }
+    const usernumber = userId
+    console.log('attempt to add something')
+    const insertEntry = async (content: string) => {
+      await supabase.from('entries').insert({ content, user_id: usernumber })
+    }
 
-  const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(event.target.value)
+    const content = formData.get('content')?.toString()
+    insertEntry(content)
+    redirect('/entries')
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <textarea value={content} onChange={onChange}></textarea>
-      <button>Submit</button>
+    <form action={insertEntry}>
+      <label>Content</label>
+      <textarea
+        style={{ border: `1px solid pink` }}
+        name="content"
+        placeholder="TEXT HERE"
+      ></textarea>
+      <button type="submit">Submit</button>
     </form>
   )
 }
